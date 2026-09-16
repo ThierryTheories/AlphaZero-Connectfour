@@ -1,7 +1,5 @@
 ROWS = 6
 COLUMNS = 7
-
-current_player = "X"
 def create_board():
     return [[" " for _ in range(COLUMNS)] for _ in range(ROWS)]
 
@@ -74,12 +72,43 @@ def is_win(board,row,col):
             return True
     return False
 
+def is_draw(board):
+    return legal_moves(board) == []
 
+current_player = "X"
 board = create_board()
 
-row = apply_move(board, 0, "X")
-row = apply_move(board, 1, "X")
-row = apply_move(board, 2, "X")
-row = apply_move(board, 3, "X")
-
-print(is_win(board, row, 3))
+    
+while True:
+    print_board(board)
+    try:
+        column = int(input(f"Player {current_player}, choose a column (1-7): "))
+    except ValueError:
+        print("Please enter a number from 1 to 7.")
+        continue
+    
+    #need to convert human input to internal calculations
+    column -=1
+    #check validity
+    if column not in legal_moves(board):
+        print('Invalid move please choose another column')
+        continue
+    #apply move
+    row = apply_move(board,column,current_player)
+    
+    #check win
+    if is_win(board,row,column):
+        print_board(board)
+        print(f"Player {current_player} wins ! ")
+        break
+    #check_draw
+    if is_draw(board):
+        print_board(board)
+        print("Draw! ")
+        break
+    
+    #switch player
+    if current_player == "X":
+        current_player = "O"
+    else:
+        current_player = "X"
