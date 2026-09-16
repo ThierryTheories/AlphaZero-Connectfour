@@ -19,6 +19,7 @@ def apply_move(board, column, current_player):
         else:
             board[row][column] = current_player
             return row
+    raise ValueError("Column is full")
         
 
 def legal_moves(board):
@@ -78,37 +79,41 @@ def is_draw(board):
 current_player = "X"
 board = create_board()
 
-    
-while True:
-    print_board(board)
-    try:
-        column = int(input(f"Player {current_player}, choose a column (1-7): "))
-    except ValueError:
-        print("Please enter a number from 1 to 7.")
-        continue
-    
-    #need to convert human input to internal calculations
-    column -=1
-    #check validity
-    if column not in legal_moves(board):
-        print('Invalid move please choose another column')
-        continue
-    #apply move
-    row = apply_move(board,column,current_player)
-    
-    #check win
-    if is_win(board,row,column):
+
+def main():
+    while True:
         print_board(board)
-        print(f"Player {current_player} wins ! ")
-        break
-    #check_draw
-    if is_draw(board):
-        print_board(board)
-        print("Draw! ")
-        break
-    
-    #switch player
-    if current_player == "X":
-        current_player = "O"
-    else:
-        current_player = "X"
+        try:
+            column = int(input(f"Player {current_player}, choose a column (1-7): "))
+        except ValueError:
+            print("Please enter a number from 1 to 7.")
+            continue
+        
+        #need to convert human input to internal calculations
+        column -=1
+        #check validity
+        if column not in legal_moves(board):
+            print('Invalid move please choose another column')
+            continue
+        #apply move
+        row = apply_move(board,column,current_player)
+        
+        #check win
+        if is_win(board,row,column):
+            print_board(board)
+            print(f"Player {current_player} wins ! ")
+            break
+        #check_draw
+        if is_draw(board):
+            print_board(board)
+            print("Draw! ")
+            break
+        
+        #switch player
+        if current_player == "X":
+            current_player = "O"
+        else:
+            current_player = "X"
+            
+if __name__ == "__main__":
+    main()
